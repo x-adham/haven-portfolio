@@ -1,0 +1,56 @@
+/* ---------- Animated gold background ---------- */
+.bg-scene {
+  position: fixed; inset: 0;
+  z-index: 0; pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -10%, rgba(212, 175, 55, 0.08), transparent 60%),
+    var(--bg);
+}
+
+.bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.35;
+  mix-blend-mode: screen;
+  will-change: transform;
+}
+.bg-orb--1 { width: 46vmax; height: 46vmax; top: -12vmax; left: -10vmax;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.55), rgba(212, 175, 55, 0) 70%); }
+.bg-orb--2 { width: 38vmax; height: 38vmax; bottom: -14vmax; right: -8vmax;
+  background: radial-gradient(circle, rgba(243, 229, 171, 0.35), rgba(243, 229, 171, 0) 70%); }
+.bg-orb--3 { width: 30vmax; height: 30vmax; top: 35%; left: 45%;
+  background: radial-gradient(circle, rgba(184, 134, 11, 0.4), rgba(184, 134, 11, 0) 70%);
+  opacity: 0.25; }
+
+/* thin rotating gold rings */
+.bg-ring {
+  position: absolute; top: 50%; left: 50%;
+  width: 90vmax; height: 90vmax;
+  margin: -45vmax 0 0 -45vmax;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 175, 55, 0.06);
+  will-change: transform;
+}
+.bg-ring--2 { width: 64vmax; height: 64vmax; margin: -32vmax 0 0 -32vmax;
+  border-style: dashed; border-color: rgba(212, 175, 55, 0.05); }
+
+/* soft gold sheen sweeping across */
+.bg-sheen {
+  position: absolute; inset: -50% -50%;
+  background: linear-gradient(115deg, transparent 42%, rgba(243, 229, 171, 0.045) 50%, transparent 58%);
+  will-change: transform;
+}
+
+#bgParticles { position: absolute; inset: 0; }
+#bgParticles canvas { pointer-events: none !important; }
+
+.bg-vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 45%, rgba(8, 8, 8, 0.85) 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-orb, .bg-ring, .bg-sheen { animation: none !important; }
+}
