@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="./css/style.css">
 <link rel="stylesheet" href="./css/modal.css">
 <link rel="stylesheet" href="./css/background.css">
+<link rel="stylesheet" href="./css/hero3d.css">
 </head>
 <body id="top">
 
@@ -28,6 +29,25 @@
   <div id="bgParticles"></div>
   <div class="bg-vignette"></div>
 </div>
+
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="preloader-panel preloader-panel--top"></div>
+  <div class="preloader-panel preloader-panel--bot"></div>
+  <div class="preloader-inner">
+    <img src="./assets/logo.png" alt="" class="preloader-logo">
+    <div class="preloader-count"><span id="preCount">0</span><sup>%</sup></div>
+    <div class="preloader-bar"><i id="preBar"></i></div>
+    <div class="preloader-lbl">Entering the focus room</div>
+  </div>
+</div>
+<script>
+  /* Never let the preloader trap the visitor if WebGL/CDN fails */
+  document.documentElement.classList.add('is-loading');
+  window.__h3dFailsafe = setTimeout(function () {
+    document.documentElement.classList.remove('is-loading');
+    document.documentElement.classList.add('is-loaded', 'h3d-nogl');
+  }, 9000);
+</script>
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-dot" id="cursorDot"></div>
@@ -49,36 +69,54 @@
 
 <main>
 
-  <section class="hero">
-    
-    <div class="hero-meta reveal">
-      <span class="dot"></span>
-      <span>Open for new builds · 2026</span>
+  <!-- ============ 3D HERO — THE FOCUS ROOM ============ -->
+  <section class="h3d" id="hero3d" aria-label="Join the Haven study server">
+    <canvas class="h3d-canvas" id="h3dCanvas" aria-hidden="true"></canvas>
+    <div class="h3d-fallback" aria-hidden="true"></div>
+    <div class="h3d-shade" aria-hidden="true"></div>
+
+    <div class="h3d-content">
+      <div class="h3d-live h3d-in" style="--d:.05s">
+        <span class="h3d-live-dot"></span>
+        <span><b id="h3dOnline">Live</b> studying in Haven right now</span>
+      </div>
+
+      <h1 class="h3d-title">
+        <span class="h3d-line"><span class="h3d-word">Study with</span></span>
+        <span class="h3d-line"><span class="h3d-word">people who</span></span>
+        <span class="h3d-line"><span class="h3d-word"><em>actually</em> show up.</span></span>
+      </h1>
+
+      <p class="h3d-lede h3d-in" style="--d:.45s">
+        Haven is a free Discord study server. Live focus sprints, body-doubling rooms, zero spam.
+        Open a tab, join a room, and get the work done with people doing the same.
+      </p>
+
+      <div class="h3d-cta h3d-in" style="--d:.6s">
+        <a href="https://discord.gg/rABxgQV8dq" target="_blank" rel="noopener" class="btn btn-primary btn-join" id="h3dJoin" data-magnetic>
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.6 1.3a18.4 18.4 0 0 0-5.6 0L8.6 3a19.7 19.7 0 0 0-4.9 1.5C.6 9.1-.3 13.7.2 18.2a19.9 19.9 0 0 0 6 3l1.3-2.1c-.7-.3-1.4-.6-2-1l.5-.4a14.2 14.2 0 0 0 12.1 0l.5.4c-.6.4-1.3.7-2 1l1.3 2.1a19.8 19.8 0 0 0 6-3c.5-5.2-.9-9.8-3.6-13.8ZM8 15.5c-1.2 0-2.2-1.1-2.2-2.4S6.8 10.7 8 10.7s2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4Z"/></svg>
+          <span>Join Haven, it's free</span>
+        </a>
+        <a href="#discord" class="btn btn-ghost" data-magnetic>How it works</a>
+      </div>
+
+      <div class="h3d-proof h3d-in" style="--d:.75s">
+        <div><b id="h3dMembers">250+</b><span>members</span></div>
+        <div><b>Daily</b><span>focus sprints</span></div>
+        <div><b>0</b><span>spam, ever</span></div>
+      </div>
     </div>
 
-    <h1 class="hero-title">
-      <span class="line"><span class="word">I</span> <span class="word">build</span></span>
-      <span class="line"><span class="word">sites</span> <span class="word">that</span></span>
-      <span class="line"><span class="word">actually</span> <span class="word accent">move.</span></span>
-    </h1>
-
-    <p class="hero-lede reveal">
-      Founder of <strong>Haven</strong> — a study community built on focus, not noise.
-      And the developer behind the sites that help students win.
-    </p>
-
-    <div class="hero-cta reveal">
-      <a href="https://discord.gg/rABxgQV8dq" target="_blank" rel="noopener" class="btn btn-primary" data-magnetic>
-        <span>Join Haven</span>
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </a>
-      <a href="#work" class="btn btn-ghost" data-magnetic>See work</a>
+    <!-- live pomodoro readout, mirrors the 3D ring -->
+    <div class="h3d-timer h3d-in" style="--d:.9s" aria-live="off">
+      <span class="h3d-timer-phase" id="h3dPhase">Focus sprint</span>
+      <span class="h3d-timer-time" id="h3dTime">25:00</span>
+      <span class="h3d-timer-sub" id="h3dSub">Pomodoro · 25 / 5</span>
     </div>
 
-    <div class="hero-stats reveal">
-      <div class="stat"><span class="stat-num" data-count="250">0</span><span class="stat-lbl">members</span></div>
-      <div class="stat"><span class="stat-num" data-count="5">0</span><span class="stat-lbl">projects shipped</span></div>
-      <div class="stat"><span class="stat-num" data-count="99">0</span><span class="stat-lbl">Lighthouse avg</span></div>
+    <div class="h3d-scrollcue h3d-in" style="--d:1s" aria-hidden="true">
+      <span class="h3d-scroll"><i></i></span>
+      <span>Scroll</span>
     </div>
   </section>
 
@@ -283,6 +321,15 @@
 <script src="./js/main.js"></script>
 <script src="./js/modal.js"></script>
 <script src="./js/discord.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="./js/hero3d.js"></script>
 </body>
 </html>
 
